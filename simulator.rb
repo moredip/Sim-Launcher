@@ -18,16 +18,14 @@ class Simulator
   
   def run_asynchronous_command( *args )
     kill_any_previous_running_commands
-    puts 'kicking off async command'
     @prev_async_pid = fork do
       Signal.trap("HUP") do
-        puts 'being killed!'
         exit
       end
       run_synchronous_command( *args )
     end
 
-    "async command #{@prev_async_pid} kicked off"
+    "async command with pid #{@prev_async_pid} kicked off"
   end
 
   def cmd_line_with_args( args )
@@ -37,7 +35,7 @@ class Simulator
     
   def kill_any_previous_running_commands
     return if @prev_async_pid.nil?
-    puts "killing #{@prev_async_pid}"
+    puts "sending HUP to #{@prev_async_pid}"
     Process.kill( "HUP", @prev_async_pid )
   end
   
