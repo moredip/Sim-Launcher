@@ -7,7 +7,7 @@ class Simulator
   end
 
   def launch_app( app_path )
-    run_asynchronous_command( :launch, app_path, '3.2', 'ipad' )
+    run_synchronous_command( :launch, app_path, '3.2', 'ipad' )
   end
 
   def run_synchronous_command( *args )
@@ -15,28 +15,9 @@ class Simulator
     puts "executing #{cmd}"
     `#{cmd}`
   end
-  
-  def run_asynchronous_command( *args )
-    kill_any_previous_running_commands
-    @prev_async_pid = fork do
-      Signal.trap("HUP") do
-        exit
-      end
-      run_synchronous_command( *args )
-    end
-
-    "async command with pid #{@prev_async_pid} kicked off"
-  end
 
   def cmd_line_with_args( args )
     cmd_sections = [IPHONESIM_PATH] + args.map{ |x| "\"#{x.to_s}\"" } << '2>&1'
     cmd_sections.join(' ')
   end
-    
-  def kill_any_previous_running_commands
-    return if @prev_async_pid.nil?
-    puts "sending HUP to #{@prev_async_pid}"
-    Process.kill( "HUP", @prev_async_pid )
-  end
-  
 end
