@@ -1,0 +1,3 @@
+[submodule "vendor/iphonesim"]
+	path = vendor/iphonesim
+	url = git@github.com:moredip/iphonesim.git
