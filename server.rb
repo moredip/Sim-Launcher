@@ -15,5 +15,16 @@ get '/launch_ipad_app' do
   app_path = params[:app_path]
   raise 'no app_path provided' if app_path.nil?
 
-  shared_simulator.launch_app( app_path )
+  sdk = params[:sdk]
+  
+  shared_simulator.launch_ipad_app( app_path, sdk )
+end
+
+get '/launch_iphone_app' do
+  app_path = params[:app_path]
+  raise 'no app_path provided' if app_path.nil?
+
+  sdk = params[:sdk]
+
+  shared_simulator.launch_iphone_app( app_path, sdk )
 end

@@ -6,8 +6,18 @@ class Simulator
     run_synchronous_command( 'showsdks' )
   end
 
-  def launch_app( app_path )
-    run_synchronous_command( :launch, app_path, '3.2', 'ipad' )
+  def launch_ios_app(app_path, sdk_version, device_family)
+  	run_synchronous_command( :launch, app_path, sdk_version, device_family )
+  end
+
+  def launch_ipad_app( app_path, sdk )
+    sdk ||= '3.2'
+    launch_ios_app( app_path, sdk, 'ipad' )
+  end
+
+  def launch_iphone_app( app_path, sdk )
+    sdk ||= '4.0'
+    launch_ios_app( app_path, sdk, 'iphone' )
   end
 
   def run_synchronous_command( *args )
