@@ -5,9 +5,13 @@ require 'sinatra'
 
 require 'sim_launcher/simulator'
 
+# SimLauncher starts on port 8881 by default. To specify a custom port just pass it as the first command line argument.
+set :port, (ARGV[0] || 8881)
+
 # otherwise sinatra won't always automagically launch its embedded
 # http server when this script is executed
 set :run, true
+
   
 IPHONESIM_PATH = File.join( File.dirname(__FILE__), '..', 'native', 'iphonesim' )
 
