@@ -13,6 +13,13 @@ IPHONESIM_PATH = File.join( File.dirname(__FILE__), '..', 'native', 'iphonesim' 
 
 shared_simulator = SimLauncher::Simulator.new( IPHONESIM_PATH )
 
+get '/' do
+  <<EOS
+  <h1>SimLauncher is up and running</h1>
+  <a href="/showsdks">Here's a list of sdks that SimLauncher has detected</a>
+EOS
+end
+
 get '/showsdks' do
   '<pre>' +
   shared_simulator.showsdks +
