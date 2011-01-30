@@ -1,9 +1,17 @@
+#!/usr/bin/env ruby
+
 require 'rubygems'
 require 'sinatra'
 
-require 'simulator'
+require 'sim_launcher/simulator'
 
-shared_simulator = Simulator.new
+# otherwise sinatra won't always automagically launch its embedded
+# http server when this script is executed
+set :run, true
+  
+IPHONESIM_PATH = File.join( File.dirname(__FILE__), '..', 'native', 'iphonesim' )
+
+shared_simulator = SimLauncher::Simulator.new( IPHONESIM_PATH )
 
 get '/showsdks' do
   '<pre>' +
