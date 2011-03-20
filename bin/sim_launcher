@@ -13,9 +13,7 @@ set :port, (ARGV[0] || 8881)
 set :run, true
 
   
-IPHONESIM_PATH = File.join( File.dirname(__FILE__), '..', 'native', 'iphonesim' )
-
-shared_simulator = SimLauncher::Simulator.new( IPHONESIM_PATH )
+shared_simulator = SimLauncher::Simulator.new
 
 get '/' do
   <<EOS

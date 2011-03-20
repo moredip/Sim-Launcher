@@ -1,8 +1,8 @@
 module SimLauncher
 class Simulator
 
-  def initialize( iphonesim_path )
-    @iphonesim_path = iphonesim_path 
+  def initialize( iphonesim_path = nil )
+    @iphonesim_path = iphonesim_path || File.join( File.dirname(__FILE__), '..', '..', 'native', 'iphonesim' )
   end
 
   def showsdks
@@ -25,7 +25,7 @@ class Simulator
 
   def run_synchronous_command( *args )
     cmd = cmd_line_with_args( args )
-    puts "executing #{cmd}"
+    puts "executing #{cmd}" if $DEBUG
     `#{cmd}`
   end
 
