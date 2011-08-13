@@ -14,12 +14,12 @@ class Simulator
   end
 
   def launch_ipad_app( app_path, sdk )
-    sdk ||= '3.2'
+    sdk ||= SdkDetector.instance.latest_sdk_version
     launch_ios_app( app_path, sdk, 'ipad' )
   end
 
   def launch_iphone_app( app_path, sdk )
-    sdk ||= '4.0'
+    sdk ||= SdkDetector.instance.latest_sdk_version
     launch_ios_app( app_path, sdk, 'iphone' )
   end
 

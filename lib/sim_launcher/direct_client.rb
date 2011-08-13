@@ -6,11 +6,11 @@ module SimLauncher
       @family = family
     end
 
-    def self.for_ipad_app( app_path, sdk = '4.2' )
+    def self.for_ipad_app( app_path, sdk = nil )
       self.new( app_path, sdk, 'ipad' )
     end
 
-    def self.for_iphone_app( app_path, sdk = '4.2' )
+    def self.for_iphone_app( app_path, sdk = nil )
       self.new( app_path, sdk, 'iphone' )
     end
 

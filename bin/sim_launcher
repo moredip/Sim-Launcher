@@ -3,7 +3,7 @@
 require 'rubygems'
 require 'sinatra'
 
-require 'sim_launcher/simulator'
+require 'sim_launcher'
 
 # SimLauncher starts on port 8881 by default. To specify a custom port just pass it as the first command line argument.
 set :port, (ARGV[0] || 8881)
