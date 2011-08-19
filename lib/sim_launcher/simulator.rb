@@ -10,16 +10,15 @@ class Simulator
   end
 
   def launch_ios_app(app_path, sdk_version, device_family)
+    sdk_version ||= SdkDetector.instance.latest_sdk_version
   	run_synchronous_command( :launch, app_path, sdk_version, device_family )
   end
 
   def launch_ipad_app( app_path, sdk )
-    sdk ||= SdkDetector.instance.latest_sdk_version
     launch_ios_app( app_path, sdk, 'ipad' )
   end
 
   def launch_iphone_app( app_path, sdk )
-    sdk ||= SdkDetector.instance.latest_sdk_version
     launch_ios_app( app_path, sdk, 'iphone' )
   end
 
