@@ -25,15 +25,15 @@ module SimLauncher
       @server_uri = URI.parse( uri.to_s )
     end
 
-    def launch
-      full_request_uri = launch_uri 
+    def launch(restart=false)
+      full_request_uri = launch_uri(restart)
       puts "requesting #{full_request_uri}" if $DEBUG
       response = Net::HTTP.get( full_request_uri )
       puts "iphonesim server reponded with:\n#{response}" if $DEBUG
     end
 
     def relaunch
-      launch
+      launch(true)
     end
 
     # check that there appears to be a server ready for us to send commands to
@@ -53,10 +53,12 @@ module SimLauncher
 
     private
 
-    def launch_uri
+    def launch_uri(requesting_restart)
       full_request_uri = @server_uri.dup
       full_request_uri.path = "/launch_#{@family}_app"
-      full_request_uri.query = "app_path=" + CGI.escape( @app_path ) + "&sdk=" + CGI.escape(@sdk)
+      full_request_uri.query = "app_path=" + CGI.escape( @app_path )
+      full_request_uri.query += "&sdk=" + CGI.escape( @sdk ) unless @sdk.nil?
+      full_request_uri.query += "&restart=" + (!!requesting_restart).to_s
       full_request_uri
     end
 

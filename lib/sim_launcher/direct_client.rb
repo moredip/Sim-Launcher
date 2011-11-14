@@ -19,7 +19,9 @@ module SimLauncher
     end
 
     def relaunch
-      launch
+      simulator = SimLauncher::Simulator.new
+      simulator.quit_simulator
+      simulator.launch_ios_app( @app_path, @sdk, @family )
     end
   end
 end

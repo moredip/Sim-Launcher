@@ -22,6 +22,10 @@ class Simulator
     launch_ios_app( app_path, sdk, 'iphone' )
   end
 
+  def quit_simulator
+    `echo 'application "iPhone Simulator" quit' | osascript`
+  end
+
   def run_synchronous_command( *args )
     cmd = cmd_line_with_args( args )
     puts "executing #{cmd}" if $DEBUG
