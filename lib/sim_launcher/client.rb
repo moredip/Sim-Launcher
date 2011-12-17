@@ -26,10 +26,16 @@ module SimLauncher
     end
 
     def launch(restart=false)
-      full_request_uri = launch_uri(restart)
-      puts "requesting #{full_request_uri}" if $DEBUG
-      response = Net::HTTP.get( full_request_uri )
-      puts "iphonesim server reponded with:\n#{response}" if $DEBUG
+      begin
+        full_request_uri = launch_uri(restart)
+        puts "requesting #{full_request_uri}" if $DEBUG
+        response = Net::HTTP.get( full_request_uri )
+        puts "iphonesim server reponded with:\n#{response}" if $DEBUG
+      rescue => ex
+        puts "There was an error reaching the sim launcher proxy, which is a little sinatra web app that ships with this Gem.  Make sure that it is running and operational.\n"
+        puts "The error was:\n"
+        puts ex.to_s
+      end
     end
 
     def relaunch
