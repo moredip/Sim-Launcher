@@ -1,3 +1,3 @@
 module SimLauncher
-  VERSION = "0.3.6.beta1"
+  VERSION = "0.3.7"
 end
