@@ -36,5 +36,17 @@ class Simulator
     cmd_sections = [@iphonesim_path] + args.map{ |x| "\"#{x.to_s}\"" } << '2>&1'
     cmd_sections.join(' ')
   end
+  
+  def xcode_version
+    `xcodebuild -version | grep "[0-9]\.[0-9]" | cut -d " " -f 2`.to_f
+  end
+  
+  def iphonesim_path(version)
+    if version < 4.3
+      File.join( File.dirname(__FILE__), '..', '..', 'native', 'iphonesim-legacy' )
+    else
+      File.join( File.dirname(__FILE__), '..', '..', 'native', 'iphonesim' )
+    end
+  end
 end
 end
