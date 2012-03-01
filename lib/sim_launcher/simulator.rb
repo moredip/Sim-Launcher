@@ -1,8 +1,8 @@
 module SimLauncher
 class Simulator
 
-  def initialize( iphonesim_path = nil )
-    @iphonesim_path = iphonesim_path || File.join( File.dirname(__FILE__), '..', '..', 'native', 'iphonesim' )
+  def initialize( iphonesim_path_external = nil )
+    @iphonesim_path = iphonesim_path_external || iphonesim_path(xcode_version)
   end
 
   def showsdks
@@ -35,6 +35,20 @@ class Simulator
   def cmd_line_with_args( args )
     cmd_sections = [@iphonesim_path] + args.map{ |x| "\"#{x.to_s}\"" } << '2>&1'
     cmd_sections.join(' ')
+  end
+  
+  def xcode_version
+    version = `xcodebuild -version`
+    raise "xcodebuild not found" unless $? == 0
+    version[/([0-9]\.[0-9])/, 1].to_f
+  end
+  
+  def iphonesim_path(version)
+    if version < 4.3
+      File.join( File.dirname(__FILE__), '..', '..', 'native', 'iphonesim-legacy' )
+    else
+      File.join( File.dirname(__FILE__), '..', '..', 'native', 'iphonesim' )
+    end
   end
 end
 end
