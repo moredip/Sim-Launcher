@@ -38,9 +38,9 @@ class Simulator
   end
   
   def xcode_version
-    version = `xcodebuild -version | grep "[0-9]\.[0-9]" | cut -d " " -f 2`.to_f
+    version = `xcodebuild -version`
     raise "xcodebuild not found" unless $? == 0
-    version
+    version[/([0-9]\.[0-9])/, 1].to_f
   end
   
   def iphonesim_path(version)
