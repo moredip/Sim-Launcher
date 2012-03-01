@@ -1,8 +1,8 @@
 module SimLauncher
 class Simulator
 
-  def initialize( iphonesim_path = nil )
-    @iphonesim_path = iphonesim_path || iphonesim_path(xcode_version)
+  def initialize( iphonesim_path_external = nil )
+    @iphonesim_path = iphonesim_path_external || iphonesim_path(xcode_version)
   end
 
   def showsdks
