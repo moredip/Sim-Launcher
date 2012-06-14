@@ -11,7 +11,7 @@ class Simulator
 
   def launch_ios_app(app_path, sdk_version, device_family)
     sdk_version ||= SdkDetector.new(self).latest_sdk_version
-  	run_synchronous_command( :launch, app_path, sdk_version, device_family )
+  	run_synchronous_command( :launch, app_path, '--sdk', sdk_version, '--family', device_family, '--exit' )
   end
 
   def launch_ipad_app( app_path, sdk )
@@ -44,11 +44,7 @@ class Simulator
   end
   
   def iphonesim_path(version)
-    if version < 4.3
-      File.join( File.dirname(__FILE__), '..', '..', 'native', 'iphonesim-legacy' )
-    else
-      File.join( File.dirname(__FILE__), '..', '..', 'native', 'iphonesim' )
-    end
+    File.join( File.dirname(__FILE__), '..', '..', 'native', 'ios-sim' )
   end
 end
 end

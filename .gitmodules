@@ -1,3 +1,6 @@
 [submodule "vendor/iphonesim"]
 	path = vendor/iphonesim
 	url = git://github.com/moredip/iphonesim.git 
+[submodule "vendor/ios-sim"]
+	path = vendor/ios-sim
+	url = https://github.com/phonegap/ios-sim.git
