@@ -49,3 +49,6 @@ get '/launch_iphone_app' do
   shared_simulator.quit_simulator if restart_requested
   shared_simulator.launch_iphone_app( app_path, sdk )
 end
+get '/quit_simulator' do
+  shared_simulator.quit_simulator
+end
