@@ -44,6 +44,12 @@ class Simulator
   end
   
   def iphonesim_path(version)
+    installed = `which ios-sim`
+    if installed =~ /(.*ios-sim)/
+      puts "Using installed ios-sim at #{$1}"
+      return $1
+    end
+
     File.join( File.dirname(__FILE__), '..', '..', 'native', 'ios-sim' )
   end
 end
