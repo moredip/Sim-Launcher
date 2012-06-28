@@ -49,3 +49,11 @@ get '/launch_iphone_app' do
   shared_simulator.quit_simulator if restart_requested
   shared_simulator.launch_iphone_app( app_path, sdk )
 end
+get '/relaunch' do
+  app_path = params[:app_path]
+  raise 'no app_path provided' if app_path.nil?
+  sdk = params[:sdk]
+
+  shared_simulator.quit_simulator
+  shared_simulator.launch_ipad_app( app_path, sdk )
+end
