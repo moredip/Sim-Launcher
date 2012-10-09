@@ -9,6 +9,28 @@ class Simulator
     run_synchronous_command( 'showsdks' )
   end
 
+  def start_simulator(sdk_version=nil, device_family="iphone")
+    sdk_version ||= SdkDetector.new(self).latest_sdk_version
+    run_synchronous_command( :start, '--sdk', sdk_version, '--family', device_family, '--exit' )
+  end
+
+  def reset(sdks=nil)
+    script_dir = File.join(File.dirname(__FILE__),"..","..","scripts")
+    reset_script = File.expand_path("#{script_dir}/reset_simulator.scpt")
+
+    sdks ||= SimLauncher::SdkDetector.new(self).available_sdk_versions
+
+    sdks.each do |sdk_path_str|
+      start_simulator(sdk_path_str,"iphone")
+      system("osascript #{reset_script}")
+      start_simulator(sdk_path_str,"ipad")
+      system("osascript #{reset_script}")
+    end
+
+    quit_simulator
+
+  end
+
   def launch_ios_app(app_path, sdk_version, device_family)
     if problem = SimLauncher.check_app_path( app_path )
       bangs = '!'*80
