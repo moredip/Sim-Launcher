@@ -16,7 +16,7 @@ class Simulator
 
   def reset(sdks=nil)
     script_dir = File.join(File.dirname(__FILE__),"..","..","scripts")
-    reset_script = File.expand_path("#{script_dir}/reset_simulator.scpt")
+    reset_script = File.expand_path("#{script_dir}/reset_simulator.applescript")
 
     sdks ||= SimLauncher::SdkDetector.new(self).available_sdk_versions
 
