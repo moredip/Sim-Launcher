@@ -9,13 +9,14 @@ class Simulator
     run_synchronous_command( 'showsdks' )
   end
 
-  def launch_ios_app(app_path, sdk_version, device_family)
+  def launch_ios_app(app_path, sdk_version, device_family, app_args = nil)
     if problem = SimLauncher.check_app_path( app_path )
       bangs = '!'*80
       raise "\n#{bangs}\nENCOUNTERED A PROBLEM WITH THE SPECIFIED APP PATH:\n\n#{problem}\n#{bangs}"
     end
     sdk_version ||= SdkDetector.new(self).latest_sdk_version
-  	run_synchronous_command( :launch, app_path, '--sdk', sdk_version, '--family', device_family, '--exit' )
+    args = ["--args"] + app_args.flatten if app_args
+    run_synchronous_command( :launch, app_path, '--sdk', sdk_version, '--family', device_family, '--exit', *args )
   end
 
   def launch_ipad_app( app_path, sdk )
