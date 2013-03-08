@@ -18,6 +18,18 @@ module SimLauncher
       SimLauncher::Simulator.new.launch_ios_app( @app_path, @sdk, @family ) 
     end
 
+    def rotate_left
+      simulator = SimLauncher::Simulator.new
+      simulator.rotate_left
+    end
+    
+    def rotate_right
+      simulator = SimLauncher::Simulator.new
+      simulator.rotate_right
+    end
+
+
+
     def relaunch
       simulator = SimLauncher::Simulator.new
       simulator.quit_simulator
