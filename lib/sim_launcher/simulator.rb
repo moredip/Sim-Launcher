@@ -14,6 +14,19 @@ class Simulator
     run_synchronous_command( :start, '--sdk', sdk_version, '--family', device_family, '--exit' )
   end
 
+
+  def rotate_left
+    script_dir = File.join(File.dirname(__FILE__),"..","..","scripts")
+    rotate_script = File.expand_path("#{script_dir}/rotate_simulator_left.applescript")
+    system("osascript #{rotate_script}")
+  end
+
+  def rotate_right
+    script_dir = File.join(File.dirname(__FILE__),"..","..","scripts")
+    rotate_script = File.expand_path("#{script_dir}/rotate_simulator_right.applescript")
+    system("osascript #{rotate_script}")
+  end
+
   def reset(sdks=nil)
     script_dir = File.join(File.dirname(__FILE__),"..","..","scripts")
     reset_script = File.expand_path("#{script_dir}/reset_simulator.applescript")
