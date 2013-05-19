@@ -1,9 +1,8 @@
 module SimLauncher
   class DirectClient
-    def initialize( app_path, sdk, family )
+    def initialize( app_path, options = {} )
       @app_path = File.expand_path( app_path )
-      @sdk = sdk
-      @family = family
+      @options = options
     end
 
     def self.for_ipad_app( app_path, sdk = nil )
@@ -15,7 +14,7 @@ module SimLauncher
     end
 
     def launch
-      SimLauncher::Simulator.new.launch_ios_app( @app_path, @sdk, @family ) 
+      SimLauncher::Simulator.new.launch_ios_app( @app_path, @options ) 
     end
 
     def rotate_left
@@ -28,12 +27,10 @@ module SimLauncher
       simulator.rotate_right
     end
 
-
-
     def relaunch
       simulator = SimLauncher::Simulator.new
       simulator.quit_simulator
-      simulator.launch_ios_app( @app_path, @sdk, @family )
+      simulator.launch_ios_app( @app_path, @options )
     end
   end
 end

@@ -44,22 +44,38 @@ class Simulator
 
   end
 
-  def launch_ios_app(app_path, sdk_version, device_family, app_args = nil)
+  def launch_ios_app( app_path, options = {} )
     if problem = SimLauncher.check_app_path( app_path )
       bangs = '!'*80
       raise "\n#{bangs}\nENCOUNTERED A PROBLEM WITH THE SPECIFIED APP PATH:\n\n#{problem}\n#{bangs}"
     end
-    sdk_version ||= SdkDetector.new(self).latest_sdk_version
-    args = ["--args"] + app_args.flatten if app_args
-    run_synchronous_command( :launch, app_path, '--sdk', sdk_version, '--family', device_family, '--exit', *args )
+    sdk_version = options[:sdk] || SdkDetector.new(self).latest_sdk_version
+    args = ["--args"] + options[:app_args].flatten if options[:app_args]
+    device = options[:device] || 'iphone' 
+
+    run_synchronous_command( :launch, app_path, '--sdk', sdk_version, *args_to_select_device(device), '--exit', *args )
   end
 
-  def launch_ipad_app( app_path, sdk )
-    launch_ios_app( app_path, sdk, 'ipad' )
+  def args_to_select_device( device )
+    args = ['--family', family_for_device(device)]
+
+    if device == 'retina iphone (3.5 inch)' || device == 'retina ipad' || device == 'retina iphone (4 inch)'
+      args = args + ['--retina']
+
+      if device == 'retina iphone (4 inch)'
+        args = args + ['--tall']
+      end
+    end
+    
+    args
   end
 
-  def launch_iphone_app( app_path, sdk )
-    launch_ios_app( app_path, sdk, 'iphone' )
+  def family_for_device( device )
+    if device == 'retina iphone (3.5 inch)' || device == 'iphone' || device == 'retina iphone (4 inch)'
+      'iphone'
+    else
+      'ipad'
+    end
   end
 
   def quit_simulator
