@@ -10,11 +10,11 @@ module SimLauncher
     end
 
     def self.for_ipad_app( app_path, sdk = nil )
-      self.new( app_path, :sdk => sdk, :device => DeviceType::iPad )
+      self.new( app_path, :sdk => sdk, :device => DeviceType::Pad )
     end
 
     def self.for_iphone_app( app_path, sdk = nil )
-      self.new( app_path, :sdk => sdk, :device => DeviceType::iPhone )
+      self.new( app_path, :sdk => sdk, :device => DeviceType::Phone )
     end
 
     def launch

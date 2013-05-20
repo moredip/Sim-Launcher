@@ -1,21 +1,21 @@
 module SimLauncher
 
 module DeviceType
-  IPHONE = 'iphone'
-  RETINA_3_5_INCH_IPHONE = 'retina iphone (3.5 inch)'
-  RETINA_4_INCH_IPHONE = 'retina iphone (4 inch)'
+  Phone = 'iphone'
+  PhoneRetina3_5Inch = 'retina iphone (3.5 inch)'
+  PhoneRetina4Inch = 'retina iphone (4 inch)'
 
-  IPAD = 'ipad'
-  RETINA_IPAD = 'retina ipad'
+  Pad = 'ipad'
+  PadRetina = 'retina ipad'
 
-  IPHONE_DEVICES = [IPHONE, RETINA_3_5_INCH_IPHONE, RETINA_4_INCH_IPHONE]
-  IPAD_DEVICES = [IPAD, RETINA_IPAD]
-  RETINA_DEVICES = [RETINA_3_5_INCH_IPHONE, RETINA_4_INCH_IPHONE, RETINA_IPAD]
+  PhoneDevices = [Phone, PhoneRetina3_5Inch, PhoneRetina4Inch]
+  PadDevices = [Pad, PadRetina]
+  RetinaDevices = [PhoneRetina3_5Inch, PhoneRetina4Inch, PadRetina]
 end
 
 module DeviceFamily
-  IPHONE = 'iphone'
-  IPAD = 'ipad'
+  Phone = 'iphone'
+  Pad = 'ipad'
 end
 
 class Simulator
@@ -83,10 +83,10 @@ class Simulator
   def args_to_select_device( device )
     args = ['--family', family_for_device(device)]
 
-    if DeviceType::RETINA_DEVICES.include? device
+    if DeviceType::RetinaDevices.include? device
       args = args + ['--retina']
 
-      if device == DeviceType::RETINA_4_INCH_IPHONE
+      if device == DeviceType::PhoneRetina4Inch
         args = args + ['--tall']
       end
     end
@@ -95,10 +95,10 @@ class Simulator
   end
 
   def family_for_device( device )
-    if DeviceType::IPHONE_DEVICES.include? device
-      DeviceFamily::IPHONE
+    if DeviceType::PhoneDevices.include? device
+      DeviceFamily::Phone
     else
-      DeviceFamily::IPAD
+      DeviceFamily::Pad
     end
   end
 
