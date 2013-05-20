@@ -10,6 +10,8 @@ module DeviceType
 
   PhoneDevices = [Phone, PhoneRetina3_5Inch, PhoneRetina4Inch]
   PadDevices = [Pad, PadRetina]
+  Devices = PhoneDevices.concat PadDevices
+
   RetinaDevices = [PhoneRetina3_5Inch, PhoneRetina4Inch, PadRetina]
 end
 
@@ -76,6 +78,7 @@ class Simulator
     sdk_version = options[:sdk] || SdkDetector.new(self).latest_sdk_version
     args = ["--args"] + options[:app_args].flatten if options[:app_args]
     device = options[:device] || 'iphone' 
+    raise "Unrecognized device type: #{device}" unless DeviceType::Devices.include? device
 
     run_synchronous_command( :launch, app_path, '--sdk', sdk_version, *args_to_select_device(device), '--exit', *args )
   end
