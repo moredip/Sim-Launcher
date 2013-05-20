@@ -33,7 +33,7 @@ get '/launch_ios_app' do
   raise 'no app_path provided' if app_path.nil?
 
   restart_requested = ("true" == params[:restart])
-  options = params.delete_if { |key, value| [:restart, :app_path].contains key }
+  options = params.delete_if { |key, value| [:restart, :app_path].include? key }
   
   shared_simulator.quit_simulator if restart_requested
   shared_simulator.launch_ios_app(app_path, options)
