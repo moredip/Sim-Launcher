@@ -1,6 +1,24 @@
 module SimLauncher
-class Simulator
 
+module DeviceType
+  IPHONE = 'iphone'
+  RETINA_3_5_INCH_IPHONE = 'retina iphone (3.5 inch)'
+  RETINA_4_INCH_IPHONE = 'retina iphone (4 inch)'
+
+  IPAD = 'ipad'
+  RETINA_IPAD = 'retina ipad'
+
+  IPHONE_DEVICES = [IPHONE, RETINA_3_5_INCH_IPHONE, RETINA_4_INCH_IPHONE]
+  IPAD_DEVICES = [IPAD, RETINA_IPAD]
+  RETINA_DEVICES = [RETINA_3_5_INCH_IPHONE, RETINA_4_INCH_IPHONE, RETINA_IPAD]
+end
+
+module DeviceFamily
+  IPHONE = 'iphone'
+  IPAD = 'ipad'
+end
+
+class Simulator
   def initialize( iphonesim_path_external = nil )
     @iphonesim_path = iphonesim_path_external || iphonesim_path(xcode_version)
   end
@@ -44,6 +62,12 @@ class Simulator
 
   end
 
+  # @param [String] app_path the app_path to launch.
+  # @param [Hash] options the options to launch the app with.
+  # @option options [String] :sdk the sdk version. Defaults to latest.
+  # @option options [String] :device the device. Defaults to non-retina iphone.
+  # @see SimLauncher::DeviceType
+  # @option options [String] :app_args arguments to pass to the app being launched.
   def launch_ios_app( app_path, options = {} )
     if problem = SimLauncher.check_app_path( app_path )
       bangs = '!'*80
@@ -59,10 +83,10 @@ class Simulator
   def args_to_select_device( device )
     args = ['--family', family_for_device(device)]
 
-    if device == 'retina iphone (3.5 inch)' || device == 'retina ipad' || device == 'retina iphone (4 inch)'
+    if DeviceType::RETINA_DEVICES.include? device
       args = args + ['--retina']
 
-      if device == 'retina iphone (4 inch)'
+      if device == DeviceType::RETINA_4_INCH_IPHONE
         args = args + ['--tall']
       end
     end
@@ -71,10 +95,10 @@ class Simulator
   end
 
   def family_for_device( device )
-    if device == 'retina iphone (3.5 inch)' || device == 'iphone' || device == 'retina iphone (4 inch)'
-      'iphone'
+    if DeviceType::IPHONE_DEVICES.include? device
+      DeviceFamily::IPHONE
     else
-      'ipad'
+      DeviceFamily::IPAD
     end
   end
 

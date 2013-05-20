@@ -6,6 +6,9 @@ module SimLauncher
   class Client
     DEFAULT_SERVER_URI = "http://localhost:8881"
 
+    # @param [String] app_path the app_path to launch.
+    # @param [Hash] options the options to launch the app with.
+    # @see SimLauncher::Simulator#launch_ios_app Simulator#launch_ios_app for valid options.
     def initialize( app_path, options = {} )
       @app_path = File.expand_path( app_path )
       @options = options
@@ -13,11 +16,11 @@ module SimLauncher
     end
 
     def self.for_ipad_app( app_path, sdk = nil )
-      self.new( app_path, sdk, 'ipad' )
+      self.new( app_path, :sdk => sdk, :device => DeviceType::iPad )
     end
 
     def self.for_iphone_app( app_path, sdk = nil )
-      self.new( app_path, sdk, 'iphone' )
+      self.new( app_path, :sdk => sdk, :device => DeviceType::iPhone )
     end
 
     def server_uri=(uri)
