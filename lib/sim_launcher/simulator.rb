@@ -1,4 +1,5 @@
 module SimLauncher
+
 class Simulator
 
   def initialize( iphonesim_path_external = nil )
@@ -59,6 +60,11 @@ class Simulator
   end
 
   def launch_iphone_app( app_path, sdk )
+    launch_ios_app( app_path, sdk, 'iphone' )
+  end
+
+  def launch_iphone_app_with_name( app_name, sdk )
+    app_path = SimLauncher.app_bundle_or_raise(app_name)
     launch_ios_app( app_path, sdk, 'iphone' )
   end
 

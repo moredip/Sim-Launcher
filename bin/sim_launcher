@@ -17,7 +17,7 @@ shared_simulator = SimLauncher::Simulator.new
 
 get '/' do
   <<EOS
-  <h1>SimLauncher is up and running</h1>
+  <h1>SimLauncher is up and running...</h1>
   <a href="/showsdks">Here's a list of sdks that SimLauncher has detected</a>
 EOS
 end
@@ -41,11 +41,17 @@ end
 
 get '/launch_iphone_app' do
   app_path = params[:app_path]
-  raise 'no app_path provided' if app_path.nil?
+  app_name = params[:app_name]
+  # raise 'no app_path provided' if app_path.nil?
 
   sdk = params[:sdk]
   restart_requested = ("true" == params[:restart])
 
   shared_simulator.quit_simulator if restart_requested
-  shared_simulator.launch_iphone_app( app_path, sdk )
+
+  if (!app_name.nil? && !app_name.empty?)
+    shared_simulator.launch_iphone_app_with_name( app_name, sdk )
+  elsif
+    shared_simulator.launch_iphone_app( app_path, sdk )
+  end
 end
