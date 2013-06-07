@@ -73,6 +73,7 @@ class Simulator
   end
 
   def run_synchronous_command( *args )
+    args.compact!
     cmd = cmd_line_with_args( args )
     puts "executing #{cmd}" if $DEBUG
     `#{cmd}`

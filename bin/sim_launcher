@@ -51,7 +51,7 @@ get '/launch_iphone_app' do
 
   if (!app_name.nil? && !app_name.empty?)
     shared_simulator.launch_iphone_app_with_name( app_name, sdk )
-  elsif
+  else
     shared_simulator.launch_iphone_app( app_path, sdk )
   end
 end
