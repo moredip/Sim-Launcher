@@ -1,4 +1,5 @@
 module SimLauncher
+
 class Simulator
 
   def initialize( iphonesim_path_external = nil )
@@ -58,7 +59,17 @@ class Simulator
     launch_ios_app( app_path, sdk, 'ipad' )
   end
 
+  def launch_ipad_app_with_name( app_name, sdk )
+    app_path = SimLauncher.app_bundle_or_raise(app_name)
+    launch_ios_app( app_path, sdk, 'iphone' )
+  end  
+
   def launch_iphone_app( app_path, sdk )
+    launch_ios_app( app_path, sdk, 'iphone' )
+  end
+
+  def launch_iphone_app_with_name( app_name, sdk )
+    app_path = SimLauncher.app_bundle_or_raise(app_name)
     launch_ios_app( app_path, sdk, 'iphone' )
   end
 
@@ -67,6 +78,7 @@ class Simulator
   end
 
   def run_synchronous_command( *args )
+    args.compact!
     cmd = cmd_line_with_args( args )
     puts "executing #{cmd}" if $DEBUG
     `#{cmd}`
