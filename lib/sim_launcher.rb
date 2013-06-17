@@ -51,15 +51,12 @@ module SimLauncher
       raise msg.join("\n")
 
     elsif (build_dirs.count > 1)
-      msg = ["Unable to auto detect APP_BUNDLE_PATH."]
+      msg = ["Unable to auto detect bundle."]
       msg << "You have several projects with the same name: #{project_name} in #{DERIVED_DATA}:\n"
       msg << build_dirs.join("\n")
 
-      msg << "\nThis means that Calabash can't automatically launch iOS simulator."
-      msg << "Searched in Xcode 4.x default: #{DEFAULT_DERIVED_DATA_INFO}"
-      msg << "\nIn features/support/launch.rb set APP_BUNDLE_PATH to"
-      msg << "the path where Xcode has built your Calabash target."
-      msg << "Alternatively you can use the environment variable APP_BUNDLE_PATH.\n"
+      msg << "\n\nThis means that sim_launcher can't automatically launch iOS simulator."
+      msg << "Searched in Xcode 4.x default: #{DEFAULT_DERIVED_DATA_INFO}\n"
       raise msg.join("\n")
     else
       puts "Found potential build dir: #{build_dirs.first}"
@@ -75,7 +72,7 @@ module SimLauncher
       puts "Unable to find .app bundle at #{path}. It should be an .app directory."
       dd_dir = derived_data_dir_for_project_name(path)
       app_bundles = Dir.glob(File.join(dd_dir, "Build", "Products", "*", "*.app"))
-      msg = "Try setting APP_BUNDLE_PATH in features/support/launch.rb to one of:\n\n"
+      msg = "sim_launcher found the following bundles:\n\n"
       msg << app_bundles.join("\n")
       raise msg
     elsif path
@@ -84,33 +81,24 @@ module SimLauncher
       dd_dir = derived_data_dir_for_project_name(path)
       sim_dirs = Dir.glob(File.join(dd_dir, "Build", "Products", "*-iphonesimulator", "*.app"))
       if sim_dirs.empty?
-        msg = ["Unable to auto detect APP_BUNDLE_PATH."]
+        msg = ["Unable to auto detect bundle."]
         msg << "Have you built your app for simulator?."
         msg << "Searched dir: #{dd_dir}/Build/Products"
-        msg << "Please build your app from Xcode"
-        msg << "You should build the -cal target."
-        msg << ""
-        msg << "Alternatively, specify APP_BUNDLE_PATH in features/support/launch.rb"
-        msg << "This should point to the location of your built app linked with calabash.\n"
+        msg << "Please build your app from Xcode\n"
         raise msg.join("\n")
       end
       preferred_dir = find_preferred_dir(sim_dirs)
       if preferred_dir.nil?
-        msg = ["Error... Unable to find APP_BUNDLE_PATH."]
+        msg = ["Error... Unable to find bundle."]
         msg << "Cannot find a built app that is linked with calabash.framework"
         msg << "Please build your app from Xcode"
-        msg << "You should build your calabash target."
-        msg << ""
-        msg << "Alternatively, specify APP_BUNDLE_PATH in features/support/launch.rb"
-        msg << "This should point to the location of your built app linked with calabash.\n"
+        msg << "You should build your calabash target.\n"
         raise msg.join("\n")
       end
       puts("-"*37)
-      puts "Auto detected APP_BUNDLE_PATH:\n\n"
-
-      puts "APP_BUNDLE_PATH=#{preferred_dir || sim_dirs[0]}\n\n"
+      puts "Auto detected bundle:\n\n"
+      puts "bundle = #{preferred_dir || sim_dirs[0]}\n\n"
       puts "Please verify!"
-      puts "If this is wrong please set it as APP_BUNDLE_PATH in features/support/launch.rb\n"
       puts("-"*37)
       bundle_path = sim_dirs[0]
     end
