@@ -62,3 +62,6 @@ get '/launch_iphone_app' do
     shared_simulator.launch_iphone_app( app_path, sdk )
   end
 end
+get '/quit_simulator' do
+  shared_simulator.quit_simulator
+end
