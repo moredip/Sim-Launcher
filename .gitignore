@@ -1,2 +1,4 @@
 .DS_Store
 pkg
+example/TestApp/build
+example/TestApp/built-products

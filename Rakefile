@@ -10,4 +10,9 @@ task "build_ios_sim" do
   end
 end
 
+desc "run unit tests"
+task :spec do
+  system "rspec"
+end
+
 task :default => [:build_ios_sim, :build]

@@ -2,6 +2,7 @@ require 'sim_launcher/client'
 require 'sim_launcher/direct_client'
 require 'sim_launcher/simulator'
 require 'sim_launcher/sdk_detector'
+require 'sim_launcher/sinatra_launcher'
 
 module SimLauncher
   def self.check_app_path( app_path )

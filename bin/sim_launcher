@@ -1,40 +1,6 @@
 #!/usr/bin/env ruby
 
 require 'rubygems'
-require 'sinatra'
-
 require 'sim_launcher'
 
-# SimLauncher starts on port 8881 by default. To specify a custom port just pass it as the first command line argument.
-set :port, (ARGV[0] || 8881)
-
-# otherwise sinatra won't always automagically launch its embedded
-# http server when this script is executed
-set :run, true
-
-  
-shared_simulator = SimLauncher::Simulator.new
-
-get '/' do
-  <<EOS
-  <h1>SimLauncher is up and running</h1>
-  <a href="/showsdks">Here's a list of sdks that SimLauncher has detected</a>
-EOS
-end
-
-get '/showsdks' do
-  '<pre>' +
-  shared_simulator.showsdks +
-  '</pre>'
-end
-
-get '/launch_ios_app' do
-  app_path = params[:app_path]
-  raise 'no app_path provided' if app_path.nil?
-
-  restart_requested = ("true" == params[:restart])
-  options = params.delete_if { |key, value| [:restart, :app_path].include? key }
-  
-  shared_simulator.quit_simulator if restart_requested
-  shared_simulator.launch_ios_app(app_path, options)
-end
+SimLauncher::SinatraLauncher.new(ARGV).launch

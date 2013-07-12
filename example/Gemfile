@@ -1,0 +1,12 @@
+# A sample Gemfile
+source "https://rubygems.org"
+
+# gem "rails"
+gem 'sim_launcher', :path => '../'
+gem 'rspec'
+gem 'rack-test'
+
+gem 'pry'
+gem 'pry-rescue'
+gem 'pry-stack_explorer'
+gem 'pry-debugger'

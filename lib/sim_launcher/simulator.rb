@@ -10,7 +10,7 @@ module DeviceType
 
   PhoneDevices = [Phone, PhoneRetina3_5Inch, PhoneRetina4Inch]
   PadDevices = [Pad, PadRetina]
-  Devices = PhoneDevices.concat PadDevices
+  Devices = PhoneDevices.clone.concat PadDevices
 
   RetinaDevices = [PhoneRetina3_5Inch, PhoneRetina4Inch, PadRetina]
 end
@@ -22,7 +22,11 @@ end
 
 class Simulator
   def initialize( iphonesim_path_external = nil )
-    @iphonesim_path = iphonesim_path_external || iphonesim_path(xcode_version)
+    @iphonesim_path_external = iphonesim_path_external
+  end
+
+  def iphonesim_path
+    @iphonesim_path ||= (@iphonesim_path_external || ask_for_iphonesim_path(xcode_version))
   end
 
   def showsdks
@@ -62,6 +66,20 @@ class Simulator
 
     quit_simulator
 
+  end
+
+  # Deprecated. Use #launch_ios_app.
+  def launch_ipad_app( app_path, options = {} )
+    raise "Don't specify a device when calling launch_ipad_app." if options[:device]
+    options[:device] = DeviceType::Pad
+    launch_ios_app( app_path, options )
+  end
+
+  # Deprecated. Use #launch_ios_app.
+  def launch_iphone_app( app_path, options = {} )
+    raise "Don't specify a device when calling launch_iphone_app." if options[:device]
+    options[:device] = DeviceType::Phone
+    launch_ios_app( app_path, options )
   end
 
   # @param [String] app_path the app_path to launch.
@@ -116,7 +134,7 @@ class Simulator
   end
 
   def cmd_line_with_args( args )
-    cmd_sections = [@iphonesim_path] + args.map{ |x| "\"#{x.to_s}\"" } << '2>&1'
+    cmd_sections = [iphonesim_path] + args.map{ |x| "\"#{x.to_s}\"" } << '2>&1'
     cmd_sections.join(' ')
   end
   
@@ -126,7 +144,7 @@ class Simulator
     version[/([0-9]\.[0-9])/, 1].to_f
   end
   
-  def iphonesim_path(version)
+  def ask_for_iphonesim_path(version)
     installed = `which ios-sim`
     if installed =~ /(.*ios-sim)/
       puts "Using installed ios-sim at #{$1}"
