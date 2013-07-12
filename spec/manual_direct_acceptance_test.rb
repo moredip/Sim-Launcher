@@ -1,8 +1,7 @@
-require 'spec_helper'
+require_relative 'spec_helper'
 
 # When run, builds and launches the TestApp, printing out any command run via Kernel#`. Modify the #launch method to use different methods on SimLauncher::Simulator to perform launching. Make a note of the final launch command run to add to simulator_spec.rb to fix the behavior of Sim_Launcher with respect to ios-sim.
 # NB: You must use `bundle exec ruby manual_direct_acceptance_test.rb` to use the Sim_Launcher gem with :path => '../'. Using just `ruby manual_direct_acceptance_test.rb` will run using any system installed Sim_Launcher.
-
 
 def build_test_app
   sh("xcodebuild -project '#{project_dir}/TestApp.xcodeproj' -sdk iphonesimulator6.1 install INSTALL_PATH='/./' DSTROOT='#{built_products_dir}'")
@@ -13,8 +12,12 @@ def sh(cmd)
   system cmd
 end
 
-def example_dir
+def spec_dir
   File.dirname(File.expand_path(__FILE__))
+end
+
+def example_dir
+  File.join(spec_dir, '..', 'example')
 end
 
 def project_dir
@@ -34,40 +37,10 @@ module Kernel
   alias_method :orig_backtick, :`
 
   def `(cmd)
-    puts "backtickin: #{cmd}"
-#     if (cmd == 'xcodebuild -version')
-#       return "Xcode 4.6.3
-# Build version 4H150"
-#     elsif (cmd == 'which ios-sim')
-#       return fake_ios_sim_endpoint
-#     elsif (cmd == "#{fake_ios_sim_endpoint} \"showsdks\" 2>&1")
-#       return "OS X SDKs:
-#   Mac OS X 10.7                   -sdk macosx10.7
-#   OS X 10.8                       -sdk macosx10.8
-
-# iOS SDKs:
-#   iOS 6.1                         -sdk iphoneos6.1
-
-# iOS Simulator SDKs:
-#   Simulator - iOS 6.1             -sdk iphonesimulator6.1"
-#     elsif (cmd =~ "#{fake_ios_sim_endpoint} \"launch\"")
-#       @launchcmd = cmd
-#     end
-  # if (cmd =~ /\"launch\"/)
-  #   @launchcmd = cmd
-  # else
+    puts "Running: #{cmd}..."
     return_string = orig_backtick(cmd)
-    puts "cmd returned: #{return_string}\n"
+    puts "Returned: #{return_string}\n"
     return_string
-  # end
-end
-
-  def launchcmd
-    @launchcmd
-  end
-
-  def fake_ios_sim_endpoint
-  '##ios-sim'
   end
 end
 
@@ -83,6 +56,4 @@ def launch
 end
 
 build_test_app
-# sim.stub(:`).with('xcodebuild -version')
 launch
-# sim.launchcmd.should == %Q{#{fake_ios_sim_endpoint} "launch" "#{test_app_path}" "--sdk" "" "--family" "iphone" "--exit" 2>&1}
