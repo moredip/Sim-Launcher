@@ -2,3 +2,6 @@
 pkg
 example/TestApp/build
 example/TestApp/built-products
+doc/
+scratch/
+.yardoc/

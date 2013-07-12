@@ -1,4 +1,4 @@
-require_relative 'spec_helper'
+require 'sim_launcher'
 
 # When run, builds and launches the TestApp, printing out any command run via Kernel#`. Modify the #launch method to use different methods on SimLauncher::Simulator to perform launching. Make a note of the final launch command run to add to simulator_spec.rb to fix the behavior of Sim_Launcher with respect to ios-sim.
 # NB: You must use `bundle exec ruby manual_direct_acceptance_test.rb` to use the Sim_Launcher gem with :path => '../'. Using just `ruby manual_direct_acceptance_test.rb` will run using any system installed Sim_Launcher.
@@ -12,12 +12,8 @@ def sh(cmd)
   system cmd
 end
 
-def spec_dir
-  File.dirname(File.expand_path(__FILE__))
-end
-
 def example_dir
-  File.join(spec_dir, '..', 'example')
+  File.dirname(File.expand_path(__FILE__))
 end
 
 def project_dir
