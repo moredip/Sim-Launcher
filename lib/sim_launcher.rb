@@ -3,18 +3,24 @@ require 'sim_launcher/direct_client'
 require 'sim_launcher/simulator'
 require 'sim_launcher/sdk_detector'
 
+# Simulator Launcher
 module SimLauncher
 
+  # Default derived data path
   DERIVED_DATA = File.expand_path("~/Library/Developer/Xcode/DerivedData")
+  # Default derived data info plist
   DEFAULT_DERIVED_DATA_INFO = File.expand_path("#{DERIVED_DATA}/*/info.plist")
 
-  def self.check_app_path( app_path )
-    unless File.exists?( app_path )
+  # Check app path
+  # @param [String] app_path app path to check
+  # @return [String] Error message or _nil_ on success
+  def self.check_app_path(app_path)
+    unless File.exists?(app_path)
       return "The specified app path doesn't seem to exist:  #{app_path}"
     end
 
     unless File.directory? app_path
-      file_appears_to_be_a_binary = !!( `file "#{app_path}"` =~ /Mach-O executable/ )
+      file_appears_to_be_a_binary = !!(`file "#{app_path}"` =~ /Mach-O executable/)
       if file_appears_to_be_a_binary
         return <<-EOS
         The specified app path is a binary executable, rather than a directory. You need to provide the path to the app *bundle*, not the app executable itself.
@@ -29,6 +35,9 @@ module SimLauncher
     nil
   end
 
+  # Get derived data directory for the project
+  # @param [String] project_name Name of the project
+  # @return [String] Derived data directory path
   def self.derived_data_dir_for_project_name(project_name)
 
     build_dirs = Dir.glob("#{DERIVED_DATA}/*").find_all do |xc_proj|
@@ -65,6 +74,9 @@ module SimLauncher
     end
   end
 
+  # Get app bundle for path or raise an exception
+  # @param [String] path Path
+  # @return [String] App bundle path
   def self.app_bundle_or_raise(path)
     bundle_path = nil
 
