@@ -9,7 +9,7 @@ module SimLauncher
     # Default server URI
     DEFAULT_SERVER_URI = "http://localhost:8881"
 
-    # Initialized
+    # Initialize
     # @param [String] app_path App path
     # @param [String] sdk SDK
     # @param [String] family Device family
