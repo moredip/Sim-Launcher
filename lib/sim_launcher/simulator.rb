@@ -187,19 +187,3 @@ module SimLauncher
 
   end
 end
-
-# Test
-def test(mode=1)
-  $DEBUG = 1
-  s = SimLauncher::Simulator.new
-  puts s.iphonesim_version
-
-  opts0 = { :retina => nil }
-  opts1 = { :retina => nil, :env => "env.plist" }
-  opts2 = { :retina => nil, :setenv => "dev=true" }
-  opts3 = {}
-
-  opts_all = [opts0, opts1, opts2, opts3]
-  s.start_simulator("6.1", "ipad", opts_all[mode])
-  s.launch_ios_app_with_options("build/TheAustralian.app", "6.1", "ipad", opts_all[mode])
-end
