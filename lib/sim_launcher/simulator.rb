@@ -3,7 +3,7 @@ module SimLauncher
 class Simulator
 
   def initialize( iphonesim_path_external = nil )
-    @iphonesim_path = iphonesim_path_external || iphonesim_path(xcode_version)
+    @iphonesim_path = iphonesim_path_external || iphonesim_path
   end
 
   def showsdks
@@ -90,12 +90,15 @@ class Simulator
   end
   
   def xcode_version
-    version = `xcodebuild -version`
-    raise "xcodebuild not found" unless $? == 0
-    version[/([0-9]\.[0-9])/, 1].to_f
+    version_out = `xcodebuild -version`
+    begin
+      Float(version_out[/([0-9]\.[0-9])/, 1])
+    rescue => ex
+      raise "Cannot determine xcode version: #{ex}"
+    end
   end
   
-  def iphonesim_path(version)
+  def iphonesim_path
     installed = `which ios-sim`
     if installed =~ /(.*ios-sim)/
       puts "Using installed ios-sim at #{$1}"
