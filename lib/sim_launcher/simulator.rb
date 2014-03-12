@@ -62,7 +62,7 @@ class Simulator
   def launch_ipad_app_with_name( app_name, sdk )
     app_path = SimLauncher.app_bundle_or_raise(app_name)
     launch_ios_app( app_path, sdk, 'iphone' )
-  end  
+  end
 
   def launch_iphone_app( app_path, sdk )
     launch_ios_app( app_path, sdk, 'iphone' )
@@ -88,7 +88,7 @@ class Simulator
     cmd_sections = [@iphonesim_path] + args.map{ |x| "\"#{x.to_s}\"" } << '2>&1'
     cmd_sections.join(' ')
   end
-  
+
   def xcode_version
     version_out = `xcodebuild -version`
     begin
@@ -97,15 +97,23 @@ class Simulator
       raise "Cannot determine xcode version: #{ex}"
     end
   end
-  
+
   def iphonesim_path
-    installed = `which ios-sim`
+    binary_name = 'ios-sim'
+
+    framework_dir = `xcode-select -p`.chomp + 'Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/iPhoneSimulatorRemoteClient.framework'
+
+    if File.directory?(framework_dir)
+      binary_name = 'ios-sim-old'
+    end
+
+    installed = `which #{binary_name}`
     if installed =~ /(.*ios-sim)/
-      puts "Using installed ios-sim at #{$1}"
+      puts "Using installed #{binary_name} at #{$1}"
       return $1
     end
 
-    File.join( File.dirname(__FILE__), '..', '..', 'native', 'ios-sim' )
+    File.join( File.dirname(__FILE__), '..', '..', 'native', binary_name )
   end
 end
 end
