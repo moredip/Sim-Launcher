@@ -109,7 +109,7 @@ class Simulator
 
     installed = `which #{binary_name}`
     if installed =~ /(.*ios-sim)/
-      puts "Using installed #{binary_name} at #{$1}"
+      puts "Using installed #{binary_name} at #{$1}" if $DEBUG
       return $1
     end
 
