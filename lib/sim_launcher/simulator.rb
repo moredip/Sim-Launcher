@@ -101,7 +101,7 @@ class Simulator
   def iphonesim_path
     binary_name = 'ios-sim'
 
-    framework_dir = `xcode-select -p`.chomp + 'Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/iPhoneSimulatorRemoteClient.framework'
+    framework_dir = `xcode-select --print-path`.chomp + 'Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/iPhoneSimulatorRemoteClient.framework'
 
     if File.directory?(framework_dir)
       binary_name = 'ios-sim-old'
