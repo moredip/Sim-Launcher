@@ -105,7 +105,7 @@ class Simulator
       return $1
     end
 
-    raise "Didn't find ios-sim in your $PATH. Please install, e.g. using\n\n\tbrew install ios-sim"
+    raise "Didn't find the ios-sim binary in your $PATH.\n\nPlease install, e.g. using Homebrew:\n\tbrew install ios-sim\n\n"
   end
 end
 end
