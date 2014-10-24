@@ -99,21 +99,13 @@ class Simulator
   end
 
   def iphonesim_path
-    binary_name = 'ios-sim'
-
-    framework_dir = `xcode-select --print-path`.chomp + 'Platforms/iPhoneSimulator.platform/Developer/Library/PrivateFrameworks/iPhoneSimulatorRemoteClient.framework'
-
-    if File.directory?(framework_dir)
-      binary_name = 'ios-sim-old'
-    end
-
-    installed = `which #{binary_name}`
+    installed = `which ios-sim`
     if installed =~ /(.*ios-sim)/
-      puts "Using installed #{binary_name} at #{$1}" if $DEBUG
+      puts "Using installed ios-sim at #{$1}" if $DEBUG
       return $1
     end
 
-    File.join( File.dirname(__FILE__), '..', '..', 'native', binary_name )
+    raise "Didn't find the ios-sim binary in your $PATH.\n\nPlease install, e.g. using Homebrew:\n\tbrew install ios-sim\n\n"
   end
 end
 end

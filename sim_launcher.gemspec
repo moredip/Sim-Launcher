@@ -16,5 +16,16 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
+  s.post_install_message = <<-EOS
+
+  ****************************************************************************************
+  * sim_launcher expects the ios-sim binary in your $PATH. Install using e.g. Homebrew:  *
+  *                                                                                      *
+  *     brew install ios-sim                                                             *
+  *                                                                                      *
+  ****************************************************************************************
+
+  EOS
+
   s.add_dependency "sinatra"
 end
