@@ -1,8 +1,13 @@
 module SimLauncher
-
+class Cml
+  def run(arg)
+    return `#{arg}`
+  end
+end
 class Simulator
 
-  def initialize( iphonesim_path_external = nil )
+  def initialize( iphonesim_path_external = nil, cml = nil )
+    @cml = cml || Cml.new
     @iphonesim_path = iphonesim_path_external || iphonesim_path
   end
 
@@ -10,9 +15,18 @@ class Simulator
     run_synchronous_command( 'showsdks' )
   end
 
+  def showdevicetypes
+    run_synchronous_command( 'showdevicetypes' )
+  end
+
   def start_simulator(sdk_version=nil, device_family="iphone")
-    sdk_version ||= SdkDetector.new(self).latest_sdk_version
-    run_synchronous_command( :start, '--sdk', sdk_version, '--family', device_family, '--exit' )
+    if iphonesim_version < 3.0 
+      sdk_version ||= SdkDetector.new(self).latest_sdk_version
+      run_synchronous_command( :start, '--sdk', sdk_version, '--family', device_family, '--exit' )
+    else
+      sdk_version ||= SdkDetector.new(self).latest_device_type
+      run_synchronous_command( :start, '--devicetypeid', sdk_version, '--exit')
+    end
   end
 
 
@@ -50,9 +64,14 @@ class Simulator
       bangs = '!'*80
       raise "\n#{bangs}\nENCOUNTERED A PROBLEM WITH THE SPECIFIED APP PATH:\n\n#{problem}\n#{bangs}"
     end
-    sdk_version ||= SdkDetector.new(self).latest_sdk_version
     args = ["--args"] + app_args.flatten if app_args
-    run_synchronous_command( :launch, app_path, '--sdk', sdk_version, '--family', device_family, '--exit', *args )
+    if iphonesim_version < 3.0 
+      sdk_version ||= SdkDetector.new(self).latest_sdk_version
+      run_synchronous_command( :launch, app_path, '--sdk', sdk_version, '--family', device_family, '--exit', *args )
+    else
+      sdk_version ||= SdkDetector.new(self).latest_device_type
+      run_synchronous_command( :launch, app_path, '--devicetypeid', sdk_version, '--exit', *args )
+    end
   end
 
   def launch_ipad_app( app_path, sdk )
@@ -74,14 +93,16 @@ class Simulator
   end
 
   def quit_simulator
-    `echo 'application "iPhone Simulator" quit' | osascript`
+    @cml.run("echo 'application \"iPhone Simulator\" quit' | osascript")
+    # new version of simulator called "Simulator"
+    @cml.run("echo 'application \"Simulator\" quit' | osascript")
   end
 
   def run_synchronous_command( *args )
     args.compact!
     cmd = cmd_line_with_args( args )
     puts "executing #{cmd}" if $DEBUG
-    `#{cmd}`
+    @cml.run("#{cmd}")
   end
 
   def cmd_line_with_args( args )
@@ -90,7 +111,7 @@ class Simulator
   end
 
   def xcode_version
-    version_out = `xcodebuild -version`
+    version_out = @cml.run("xcodebuild -version")
     begin
       Float(version_out[/([0-9]\.[0-9])/, 1])
     rescue => ex
@@ -99,13 +120,22 @@ class Simulator
   end
 
   def iphonesim_path
-    installed = `which ios-sim`
+    installed = @cml.run("which ios-sim")
     if installed =~ /(.*ios-sim)/
       puts "Using installed ios-sim at #{$1}" if $DEBUG
       return $1
     end
 
     raise "Didn't find the ios-sim binary in your $PATH.\n\nPlease install, e.g. using Homebrew:\n\tbrew install ios-sim\n\n"
+  end
+
+  def iphonesim_version
+    version_out = @cml.run("#{@iphonesim_path} --version")
+    begin
+      Float(version_out[/([0-9]\.[0-9])/, 1])
+    rescue => ex
+      raise "Cannot determine ios-sim version: #{ex}"
+    end
   end
 end
 end
