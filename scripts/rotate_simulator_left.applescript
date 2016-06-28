@@ -1,6 +1,6 @@
 tell application "System Events"
 	
-	tell process "iPhone Simulator"
+	tell process "Simulator"
 		
 		tell menu bar 1
 			tell menu bar item "Hardware"

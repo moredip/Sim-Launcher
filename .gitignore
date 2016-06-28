@@ -1,3 +1,4 @@
 .DS_Store
 pkg
 sim_launcher*gem
+Gemfile.lock

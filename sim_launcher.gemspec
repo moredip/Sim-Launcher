@@ -28,4 +28,6 @@ Gem::Specification.new do |s|
   EOS
 
   s.add_dependency "sinatra"
+
+  s.add_development_dependency("rspec", [">=2.14.1"]) 
 end
